@@ -1,0 +1,54 @@
+marsty@cikernel Rogulike >> ls 
+main.c  main.c~
+marsty@cikernel Rogulike >> ls 
+main.c  main.c~
+marsty@cikernel Rogulike >> gcc -o rogulike main.c
+/usr/bin/ld: /tmp/cczL5NRt.o: warning: relocation against `stdscr' in read-only section `.text'
+/usr/bin/ld: /tmp/cczL5NRt.o: in function `main':
+main.c:(.text+0xd): undefined reference to `initscr'
+/usr/bin/ld: main.c:(.text+0x18): undefined reference to `stdscr'
+/usr/bin/ld: main.c:(.text+0x22): undefined reference to `waddch'
+/usr/bin/ld: main.c:(.text+0x29): undefined reference to `stdscr'
+/usr/bin/ld: main.c:(.text+0x31): undefined reference to `wgetch'
+/usr/bin/ld: main.c:(.text+0x36): undefined reference to `endwin'
+/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+collect2: error: ld returned 1 exit status
+marsty@cikernel Rogulike >> 
+marsty@cikernel Rogulike >> gcc -o roguelike main.c -lncurses
+marsty@cikernel Rogulike >> ./roguelike 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @w
+marsty@cikernel Rogulike >> marsty@cikernel Rogulike >> git add.
+git: 'add.' is not a git command. See 'git --help'.
+
+The most similar command is
+	add
+marsty@cikernel Rogulike >
+marsty@cikerne
+marsty@cikernel Rogulike >> git add . 
+marsty@cikernel Rogulike >> git commit  -m "Добавил персонажа на окно! ЕЕЕЕ"
+[main 9d601fb] Добавил персонажа на окно! ЕЕЕЕ
+ 5 files changed, 36 insertions(+)
+ create mode 100644 #main.c#
+ create mode 120000 .#main.c
+ create mode 100644 main.c
+ create mode 100644 main.c~
+ create mode 100755 roguelike
+marsty@cikernel Rogulike >> git push -u origin main
+Username for 'https://github.com': marsty
+Password for 'https://marsty@github.com': 
+remote: Write access to repository not granted.
+fatal: unable to access 'https://github.com/Chaos-Industries-Foundation/Rogulike/': The requested URL returned error: 403
+marsty@cikernel Rogulike >> git remote set-url origin git@github.com:Chaos-Industries-Foundation/Rogulike.git
+
+marsty@cikernel Rogulike >> marsty@cikernel Rogulike >> git push -u origin main
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (7/7), 2.88 KiB | 736.00 KiB/s, done.
+Total 7 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), done.        
+To github.com:Chaos-Industries-Foundation/Rogulike.git
+   222bb0a..9d601fb  main -> main
+branch 'main' set up to track 'origin/main'.
+marsty@cikernel Rogulike >> 
