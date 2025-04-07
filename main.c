@@ -3,10 +3,10 @@
 int
 main()
 {
-  char character = '@';
+  char main_character = '@';
 
   initscr(); //Инициализация либы
-  addch(character);
+  addch(main_character);
   getch();
   
 
