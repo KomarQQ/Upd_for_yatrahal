@@ -51,4 +51,28 @@ remote: Resolving deltas: 100% (1/1), done.
 To github.com:Chaos-Industries-Foundation/Rogulike.git
    222bb0a..9d601fb  main -> main
 branch 'main' set up to track 'origin/main'.
+marsty@cikernel Rogulike >> git push -u origin main 
+branch 'main' set up to track 'origin/main'.
+Everything up-to-date
+marsty@cikernel Rogulike >> git add .
+marsty@cikernel Rogulike >> git commit -m "Убрал дрисню эмакса"
+[main 9f10a4a] Убрал дрисню эмакса
+ 4 files changed, 166 insertions(+)
+ create mode 100644 #*shell*#
+ create mode 100644 *shell*
+ create mode 100644 *shell*~
+ create mode 120000 .#*shell*
+marsty@cikernel Rogulike >> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 1.46 KiB | 749.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), done.        
+To github.com:Chaos-Industries-Foundation/Rogulike.git
+   9d601fb..9f10a4a  main -> main
+marsty@cikernel Rogulike >> git push -u origin main
+branch 'main' set up to track 'origin/main'.
+Everything up-to-date
 marsty@cikernel Rogulike >> 
