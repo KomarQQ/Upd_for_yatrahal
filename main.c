@@ -1,91 +1,110 @@
 #include <curses.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-WINDOW *create_newwin(int height, int width, int starty, int startx);
+#define MAP_WIDTH 40
+#define MAP_HEIGHT 20
 
-int
-main()
-{
-  char main_character = '@';
+typedef enum {
+    EMPTY = ' ',
+    TREE = 'T',
+    ROCK = '#',
+    PLAYER = '@'
+} CellType;
 
-  WINDOW *my_win;
-  int startx, starty, width, height;
+CellType map[MAP_HEIGHT][MAP_WIDTH];
+WINDOW *map_win;
+int player_x, player_y;
 
-  initscr();
-  cbreak();
-  noecho();
-  keypad(stdscr, TRUE);
-  curs_set(2);
-
-  int main_ch_pos_x = COLS / 2;
-  int main_ch_pos_y = LINES / 2;
-  
-  height = LINES - 4;
-  width = COLS - 15;
-  starty = (LINES - height) / 2;
-  startx = (COLS - width) / 2;
-
- 
-  
-  for(;;){
-    my_win = create_newwin(height, width, starty, startx);  
-    mvaddch(main_ch_pos_y, main_ch_pos_x, main_character);
-    move(main_ch_pos_y, main_ch_pos_x);
-    int input = getch();
-
-    /*movement*/
-    if(input == KEY_LEFT){
-      mvaddch(main_ch_pos_y, main_ch_pos_x, ' ');
-      refresh();
-     
-      main_ch_pos_x -= 1;
-      mvaddch(main_ch_pos_y, main_ch_pos_x, main_character);
-      move(main_ch_pos_y, main_ch_pos_x);
+void generate_map() {
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            map[y][x] = EMPTY;
+        }
     }
-
-    if(input == KEY_RIGHT){
-      mvaddch(main_ch_pos_y, main_ch_pos_x, ' ');
-      refresh();
-
-      main_ch_pos_x += 1;
-      mvaddch(main_ch_pos_y, main_ch_pos_x, main_character);
-      move(main_ch_pos_y, main_ch_pos_x);
-    }
-
-    if(input == KEY_UP){
-      mvaddch(main_ch_pos_y, main_ch_pos_x, ' ');
-      refresh();
-
-      main_ch_pos_y -= 1;
-      mvaddch(main_ch_pos_y, main_ch_pos_x, main_character);
-       move(main_ch_pos_y, main_ch_pos_x);
-    }
-	
-    if(input == KEY_DOWN){
-      mvaddch(main_ch_pos_y, main_ch_pos_x, ' ');
-      refresh();
-
-      main_ch_pos_y += 1;
-      
-      mvaddch(main_ch_pos_y, main_ch_pos_x, main_character);
-      move(main_ch_pos_y, main_ch_pos_x);
-    }
-
-    if(input == 27)
-      break;
     
-  }
-  endwin();
-  return 0;
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            if (rand() % 100 < 25) map[y][x] = TREE;
+        }
+    }
+    
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            if (map[y][x] == EMPTY && rand() % 100 < 10) {
+                map[y][x] = ROCK;
+            }
+        }
+    }
+    
+    do {
+        player_x = rand() % MAP_WIDTH;
+        player_y = rand() % MAP_HEIGHT;
+    } while (map[player_y][player_x] != EMPTY);
 }
 
-WINDOW *create_newwin(int height, int width, int starty, int startx) {
-  WINDOW *local_win;
+void draw_map() {
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            if (x == player_x && y == player_y) {
+                mvwaddch(map_win, y + 1, x + 1, PLAYER);
+            } else {
+                mvwaddch(map_win, y + 1, x + 1, map[y][x]);
+            }
+        }
+    }
+    wrefresh(map_win);
+}
 
-  local_win = newwin(height, width, starty, startx);
-  box(local_win, 0, 0);
+int can_move_to(int x, int y) {
+    if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return 0;
+    return map[y][x] == EMPTY;
+}
 
-  wrefresh(local_win);
-  
-  return local_win;
+WINDOW *create_map_win(int height, int width, int starty, int startx) {
+    WINDOW *win = newwin(height, width, starty, startx);
+    box(win, 0, 0);
+    return win;
+}
+
+int main() {
+    srand(time(NULL));
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+
+    generate_map();
+    
+    int win_height = MAP_HEIGHT + 2;
+    int win_width = MAP_WIDTH + 2;
+    int starty = (LINES - win_height) / 2;
+    int startx = (COLS - win_width) / 2;
+    
+    map_win = create_map_win(win_height, win_width, starty, startx);
+    
+    while(1) {
+        draw_map();
+        int input = getch();
+        
+        int new_x = player_x;
+        int new_y = player_y;
+        
+        switch(input) {
+            case KEY_LEFT:  new_x--; break;
+            case KEY_RIGHT: new_x++; break;
+            case KEY_UP:    new_y--; break;
+            case KEY_DOWN: new_y++; break;
+            case 27:        endwin(); return 0;
+        }
+        
+        if (can_move_to(new_x, new_y)) {
+            player_x = new_x;
+            player_y = new_y;
+        }
+    }
+    
+    endwin();
+    return 0;
 }
